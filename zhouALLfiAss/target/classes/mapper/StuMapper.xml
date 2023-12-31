@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.zhouallfiass.mapper.StuMapper">
+<!-- 1.	根据姓名进行模糊查询或者所在学院或者所在班级进行一个查询   -->
+    <select id="selectAll" resultType="com.example.zhouallfiass.pojo.Stu">
+        select * from stu
+        <where>
+            <if test='stuName != null'>
+                 and stuName like concat('%',#{stuName},'%')
+            </if>
+            <if test='stuId != null'>
+                and stuId like concat('%',#{stuId},'%')
+            </if>
+            <if test='stuAcd != null'>
+                 and stuAcd like concat('%',#{stuAcd},'%')
+            </if>
+            <if test='stuClass != null'>
+                and stuClass like concat('%',#{stuClass},'%')
+            </if>
+        </where>
+        order by age desc
+    </select>
+
+<!--  根据stuId 批量删除:  -->
+    <delete id="deleteAny" >
+        delete from stu where stuId in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+<!--    添加数据 -->
+    <insert id="insertOne" parameterType="com.example.zhouallfiass.pojo.Stu">
+        insert into stu value(#{stuName},#{stuId},#{stuAcd},#{stuClass},#{age},#{nomClass})
+    </insert>
+
+</mapper>
